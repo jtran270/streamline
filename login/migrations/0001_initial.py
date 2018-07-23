@@ -12,21 +12,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='ListenerUserId',
-            fields=[
-                ('user_id', models.IntegerField(primary_key=True, serialize=False)),
-                ('email', models.CharField(max_length=255, unique=True)),
-                ('first_name', models.CharField(blank=True, max_length=255, null=True)),
-                ('last_name', models.CharField(blank=True, max_length=255, null=True)),
-                ('age', models.IntegerField(blank=True, null=True)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='ListenerEmail',
-            fields=[
-                ('email', models.ForeignKey(db_column='email', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='login.ListenerUserId')),
-                ('password', models.CharField(blank=True, max_length=255, null=True)),
-            ],
-        ),
     ]
