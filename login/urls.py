@@ -7,5 +7,3 @@ urlpatterns = [
 
 
 ]
-
-streamline.com/login
