@@ -1,7 +1,7 @@
 from django.db import connection
 
-LISTENER_EMAIL = "login_listeneremail"
-LISTENER_USERID = "login_listeneruserid"
+LISTENER_EMAIL = "ListenerEmail"
+LISTENER_USERID = "ListenerUserID"
 
 
 def sql_fetchone_cmd(query):
