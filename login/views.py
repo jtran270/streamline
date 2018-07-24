@@ -1,36 +1,40 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from global_var_and_func import LISTENER_USERID, LISTENER_EMAIL, sql_fetchone_cmd
+
 # Create your views here.
 
-from django.db import connection
-
-LISTENER_EMAIL = "login_listeneremail"
-LISTENER_USERID = "login_listeneruserid"
-
-def sql_cmd(query):
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        row = cursor.fetchone()
-    return row
 
 def login(request):
     if request.method == 'POST':
         user_email = request.POST.get('user_email', None)
-        password = request.POST.get('password',None)
+        password = request.POST.get('password', None)
 
-        login_sql = "SELECT email,password FROM {} WHERE email = \'{}\' AND \
-        password = \'{}\';".format(LISTENER_EMAIL,user_email,password)
-        result_sql = sql_cmd(login_sql)
+        login_sql = "SELECT email,password FROM {} WHERE email = \'{}\' AND "\
+                    "password = \'{}\';".format(LISTENER_EMAIL, user_email, password)
+
+        print(login_sql)
+
+        result_sql = sql_fetchone_cmd(login_sql)
+
         if result_sql:
-            print (result_sql)
-            #return render(request, 'user_info/user_info.html')
-            return redirect('/user_info/')
+            print(result_sql)
+
+            fetch_user_id_sql = "SELECT User_Id from {},{} " \
+                                "WHERE {}.email = {}.email " \
+                                "AND {}.email=\'{}\' ;".format(LISTENER_EMAIL, LISTENER_USERID,
+                                                               LISTENER_EMAIL, LISTENER_USERID,
+                                                               LISTENER_USERID, result_sql[0])
+            user_id = sql_fetchone_cmd(fetch_user_id_sql)[0]
+            url = '/user_info/{}/'.format(user_id)
+            return redirect(url)
         else:
             message = "Entered the wrong user name or password try again please"
 
         return render(request, 'login/login.html', {"message": message})
     return render(request, 'login/login.html')
+
+
 '''
 def search(request):
     if request.method == 'POST':

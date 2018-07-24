@@ -1,0 +1,7 @@
+<a href="/user_info/{{ user_id }}/detail/">Back</a>
+
+<form method="POST" action="/user_info/{{ user_id }}/update/">
+{% csrf_token %}
+<input type="text" name="new_age"><br>
+<button type="submit">Update</button>
+</form>

@@ -1,12 +1,13 @@
 
 <h1>StreamLine Media </h1>
+
 {% if message %}
   <div class = "alert alert-warning">{{ message}}</div>
 {% endif %}
+
 <form method="POST" action="/login/">
 {% csrf_token %}
-<input type="text" name="user_email">
-<br>
+<input type="text" name="user_email"><br>
 <input type="text" name="password">
 <button type="submit">Login</button>
 </form>
