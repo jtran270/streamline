@@ -45,6 +45,8 @@ DELETE FROM ArtistUserid;
 DELETE FROM ArtistEmail;
 DELETE FROM ArtistName;
 DELETE FROM Album;
+DELETE FROM ContainSong;
+DELETE FROM CreateAlbum;
 
 INSERT INTO ArtistUserid(userid,email,stagename)
 VALUES (1,'jcube@enterprise.ca','JCUBE'),
@@ -73,3 +75,24 @@ VALUES (1,'deephouse.jpg','Deep Jouse'),
         (3,'dawg.jpg','Fufusu'),
         (4,'boss.png','IamBoss'),
         (5,'711.jpg','7-Eleven');
+
+INSERT INTO ContainSong(AlbumID,SongName,TrackLength)
+VALUES (1,'Jouse Flow','00:05:00'),
+        (1,'Private Selec.','00:03:40'),
+        (1,'Bliss','00:02:59'),
+        (2,'Sad Boi','00:03:21'),
+        (2,'Cries','00:04:00'),
+        (2,'Trap Nation','00:03:20'),
+        (3,'Fufusu','00:04:38'),
+        (3,'I am a sinner','00:08:08'),
+        (4,'Boss','00:06:09'),
+        (4,'BossMama','00:04:12'),
+        (5,'7-11','00:04:29'),
+        (5,'Storm','00:02:38');
+
+INSERT INTO CreateAlbum(UserId,AlbumID,CreationDate)
+VALUES (1,1,'2018-06-20'),
+        (2,2,'2018-06-21'),
+        (3,3,'2018-06-22'),
+        (4,4,'2018-06-23'),
+        (5,5,'2018-06-24');
