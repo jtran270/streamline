@@ -10,7 +10,7 @@ def login(request):
         user_email = request.POST.get('user_email', None)
         password = request.POST.get('password', None)
 
-        login_sql = "SELECT email,password FROM {} WHERE email = \'{}\' AND "\
+        login_sql = "SELECT Email,password FROM {} WHERE Email = \'{}\' AND "\
                     "password = \'{}\';".format(LISTENER_EMAIL, user_email, password)
 
         print(login_sql)
@@ -20,9 +20,9 @@ def login(request):
         if result_sql:
             print(result_sql)
 
-            fetch_user_id_sql = "SELECT User_Id from {},{} " \
-                                "WHERE {}.email = {}.email " \
-                                "AND {}.email=\'{}\' ;".format(LISTENER_EMAIL, LISTENER_USERID,
+            fetch_user_id_sql = "SELECT UserId from {},{} " \
+                                "WHERE {}.Email = {}.Email " \
+                                "AND {}.Email=\'{}\' ;".format(LISTENER_EMAIL, LISTENER_USERID,
                                                                LISTENER_EMAIL, LISTENER_USERID,
                                                                LISTENER_USERID, result_sql[0])
             user_id = sql_fetchone_cmd(fetch_user_id_sql)[0]

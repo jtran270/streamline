@@ -12,7 +12,7 @@ def user_info(request, user_id):
 
 def detail(request, user_id):
     get_user_sql = "SELECT * FROM {} " \
-                   "WHERE user_id = {};".format(LISTENER_USERID, user_id)
+                   "WHERE UserId = {};".format(LISTENER_USERID, user_id)
     print(get_user_sql)
     result = sql_fetchone_cmd(get_user_sql)
     # print(result)
@@ -28,16 +28,12 @@ def detail(request, user_id):
     return render(request, 'user_info/detail.html', context)
 
 
-    # UPDATE table_name
-    # SET column1 = value1, column2 = value2, ...
-    # WHERE condition;
-
 def update_age(request, user_id):
     if request.method == 'POST':
         print("I got here")
         age = request.POST.get('new_age', None)
         if age != '':
-            update_age_sql = "UPDATE {} SET age={} WHERE user_id={};".format(LISTENER_USERID,age,user_id)
+            update_age_sql = "UPDATE {} SET Age={} WHERE UserId={};".format(LISTENER_USERID, age, user_id)
             print(update_age_sql)
             sql_update_cmd(update_age_sql)
             return redirect("/user_info/" + str(user_id) + "/detail/")
