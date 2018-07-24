@@ -1,3 +1,6 @@
+DELETE FROM ListenerUserID;
+DELETE FROM ListenerEmail;
+
 -- INSERT VALUES
 INSERT INTO ListenerUserID (UserID,Email,FirstName,LastName,Age)
 VALUES
