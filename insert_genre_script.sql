@@ -1,3 +1,5 @@
+DELETE FROM Genre;
+
 INSERT INTO Genre (GenreName)
 VALUES
 ('Hip pop'),
@@ -6,4 +8,4 @@ VALUES
 ('Deep House'),
 ('House'),
 ('Pop'),
-('Techno')
+('Techno');

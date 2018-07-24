@@ -1,3 +1,5 @@
+DELETE FROM Have;
+
 INSERT INTO Have (AlbumID,SongName,GenreName)
 VALUES
 (1,'Jouse Flow','Deep House'),
@@ -6,4 +8,4 @@ VALUES
 (2,'Trap Nation','Trap'),
 (3,'Fufusu','Techno'),
 (4,'Boss','House'),
-(5,'Storm','Pop')
+(5,'Storm','Pop');

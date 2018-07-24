@@ -1,3 +1,5 @@
+DELETE FROM Label;
+
 INSERT INTO Label (LabelName)
 VALUES
 ('Omniversal Music Group'),
@@ -6,4 +8,4 @@ VALUES
 ('Old Money Entertainment'),
 ('Ric Nation LLC'),
 ('YoBoss Inc.'),
-('88 Rising')
+('88 Rising');
