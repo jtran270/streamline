@@ -79,7 +79,7 @@ ON DELETE CASCADE
 ON UPDATE CASCADE
 );
 
-CREATE TABLE Include(
+CREATE TABLE PlaylistIncludesSongs(
 AlbumID INT,
 SongName VARCHAR(255),
 UserID INT,
@@ -97,7 +97,7 @@ CREATE TABLE Genre(
 GenreName VARCHAR(255) PRIMARY KEY
 );
 
-CREATE TABLE Have(
+CREATE TABLE HaveSongs(
 AlbumID INT,
 SongName VARCHAR(255),
 GenreName VARCHAR(255),
@@ -114,7 +114,7 @@ CREATE TABLE Label(
 LabelName VARCHAR(255) PRIMARY KEY
 );
 
-CREATE TABLE Under(
+CREATE TABLE UnderLabel(
 UserID INT,
 AlbumID INT,
 LabelName VARCHAR(255),
@@ -130,7 +130,7 @@ ON DELETE CASCADE
 ON UPDATE CASCADE
 );
 
-CREATE TABLE IsParentOf(
+CREATE TABLE IsParentOfLabel(
 ParentLabelName VARCHAR(255),
 SubLabelName VARCHAR(255),
 PRIMARY KEY (ParentLabelName, SubLabelName),
