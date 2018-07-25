@@ -1,0 +1,24 @@
+<h1>I'm feeling lucky</h1>
+<h3> Congratulations! Here is your lucky pick.</h3>
+<p>We give you the artist info and the name of their album that has more than 2 songs that are 3 minutes or longer.
+<br>Happy listening!</p>
+
+<a href="/user_info/{{ user_id }}/">Back</a>
+
+
+<table style = "width: 100%; border: 1px solid black; padding: 15px; text-align: left">
+<tr>
+    <th> StageName </th>
+    <th> FirstName</th>
+    <th> LastName </th>
+    <th> AlbumName </th>
+</tr>
+{% for row in result %}
+<tr>
+    <td> {{ row.0 }} </td>
+    <td> {{ row.1 }} </td>
+    <td> {{ row.2 }} </td>
+    <td> {{ row.3 }} </td>
+</tr>
+{% endfor %}
+</table>
