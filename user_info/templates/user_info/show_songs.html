@@ -1,0 +1,22 @@
+<h1>Show songs by Genre</h1>
+<a href="/user_info/{{ user_id }}/">Back</a>
+
+
+<form action="." method="post">
+    {% csrf_token %}
+    <label>
+        <select name="select_genre">
+            <option selected="selected" disabled>Choose genre:</option>
+            <option value="Hip Hop">Hip Hop</option>
+            <option value="Rap"> Rap</option>
+            <option value="Trap"> Trap</option>
+            <option value="Deep House">Deep House</option>
+            <option value="House">House</option>
+            <option value="Pop">Pop</option>
+            <option value="Techno">Techno</option>
+            <option value="Country">Country</option>
+        </select>
+    </label>
+    <input type="submit" value="Select">
+</form>
+
