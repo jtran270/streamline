@@ -100,7 +100,7 @@ VALUES
 ------------------------------ Genre -----------------------------------
 INSERT INTO Genre (GenreName)
 VALUES
-('Hip pop'),
+('Hip Hop'),
 ('Rap'),
 ('Trap'),
 ('Deep House'),

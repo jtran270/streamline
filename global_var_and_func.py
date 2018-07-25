@@ -14,7 +14,7 @@ def sql_fetchone_cmd(query):
 def sql_fetchall_cmd(query):
     with connection.cursor() as cursor:
         cursor.execute(query)
-        row = cursor.fetchone()
+        row = cursor.fetchall()
     return row
 
 

@@ -2,9 +2,30 @@
 
 <a href="/user_info/{{ user_id }}/">Back</a>
 
+<form action="." method="post">
+    {% csrf_token %}
+    <label>
+        <select name="select_detail">
+            <option selected="selected" disabled>Choose detail:</option>
+            <option value="email">Email</option>
+            <option value="firstname">First Name</option>
+            <option value="lastname">Last Name</option>
+            <option value="age">Age</option>
+        </select>
+    </label>
+    <input type="submit" value="Select">
+</form>
 
-<p>Email: {{ email }}</p>
-<p>First Name: {{ first_name }}</p>
-<p>Last Name: {{ last_name }}</p>
-<p>Age: {{ age }}</p>
+
+{% if email %}
+    <p> Email: {{ email }} </p>
+{% elif firstname %}
+    <p>First Name: {{ firstname }}</p>
+{% elif lastname %}
+    <p>Last Name: {{ lastname }}</p>
+{% elif age %}
+    <p>Age: {{ age }}</p>
+{% endif %}
+
+
 <a href="/user_info/{{ user_id }}/update/"> Update Age </a>
