@@ -9,6 +9,7 @@ def user_info(request, user_id):
     context = {'user_id': user_id}
     return render(request, 'user_info/user_info.html', context)
 
+
 def display_playlist(request, user_id):
     #3. JOIN QUERY:Output playlist name, and all song-related info for user logged in
     #result returns:playlistname, songname, stagename, albumname, tracklength
@@ -37,6 +38,7 @@ def display_playlist(request, user_id):
                 'song_count': total_song_count_playlist
                }
     return render(request, 'user_info/playlist.html', context)
+
 
 def detail(request, user_id):
 
@@ -87,27 +89,20 @@ def show_songs(request, user_id):
     if "select_genre" in request.POST:
         selected_value = request.POST["select_genre"]
 
-        # context = {'user_id': user_id,
-        #            'selected_value': selected_value}
-        #
-        # get_user_sql = "SELECT {} FROM {} " \
-        #                "WHERE UserId = {};".format(selected_value, LISTENER_USERID, user_id)
-        #
-        #
-        # print(get_user_sql)
-        # result = sql_fetchall_cmd(get_user_sql)
-        # response = result[0]
+        get_songs_by_genre_sql = "SELECT CS.SongName, AID.stagename, A.albumname " \
+                                 "FROM ContainSong CS " \
+                                 "JOIN havesongs HS ON HS.albumid = CS.albumid AND HS.songname = CS.songname " \
+                                 "JOIN Album A ON A.albumid = CS.albumid " \
+                                 "JOIN createalbum CA ON CA.albumid = A.albumid " \
+                                 "JOIN ArtistUserId AID ON AID.userid = CA.userid " \
+                                 "WHERE HS.genrename = \'{}\';".format(selected_value)
+        print(get_songs_by_genre_sql)
+        song_details = sql_fetchall_cmd(get_songs_by_genre_sql)
 
-        # if selected_value == 'email':
-        #     context['email'] = response
-        # elif selected_value == 'firstname':
-        #     context['firstname'] = response
-        # elif selected_value == 'lastname':
-        #     context['lastname'] = response
-        # elif selected_value == 'age':
-        #     context['age'] = response
-
-        return render(request, 'user_info/show_songs.html', {'user_id': user_id})
+        context = {'user_id': user_id,
+                   'selected_value': selected_value,
+                   'result': song_details}
+        return render(request, 'user_info/show_songs.html', context)
 
     else:
         selected_value = None
