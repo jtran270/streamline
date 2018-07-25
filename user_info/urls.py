@@ -13,4 +13,8 @@ urlpatterns = [
 
     #/user_info/7/show_songs/
     path('<int:user_id>/show_songs/', views.show_songs, name='show_songs'),
+
+    # /user_info/7/playlist/
+    path('<int:user_id>/playlist/', views.display_playlist, name='display_playlist'),
+
 ]

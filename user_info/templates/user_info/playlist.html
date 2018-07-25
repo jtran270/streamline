@@ -1,0 +1,25 @@
+<h1>User playlist</h1>
+
+<a href="/user_info/{{ user_id }}/">Back</a>
+
+<p>Fuck ton of results <br></br> {{ result }}
+playlistname, songname, stagename, albumname, tracklength
+<br></br>
+<br></br>
+<table style = "width: 100%; border: 1px solid black; padding: 15px; text-align: left">
+<tr>
+  <th> PlayListName </th>
+  <th> SongName </th>
+  <th> StageName </th>
+  <th> AlbumName </th>
+  <th> TrackLength </th>
+</tr>
+{% for row in result %}
+<tr>
+    <td> {{ row.0 }} </td>
+    <td> {{ row.1 }} </td>
+    <td> {{ row.2 }} </td>
+    <td> {{ row.3 }} </td>
+    <td> {{ row.4 }} </td>
+</tr>
+{% endfor %}

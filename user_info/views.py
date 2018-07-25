@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from global_var_and_func import LISTENER_USERID, sql_update_cmd, sql_fetchone_cmd, sql_fetchall_cmd
 
-
 # Create your views here.
 
 
@@ -10,6 +9,22 @@ def user_info(request, user_id):
     context = {'user_id': user_id}
     return render(request, 'user_info/user_info.html', context)
 
+def display_playlist(request, user_id):
+    #Output playlist name, and all song-related info for user logged in
+    #result returns:playlistname, songname, stagename, albumname, tracklength
+    get_playlist_sql = "SELECT PIS.playlistname, PIS.songname, AID.stagename, A.albumname, CS.tracklength \
+                    FROM playlistincludessongs PIS \
+                    JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname \
+                    JOIN Album A ON A.albumid = CS.albumid \
+                    JOIN createalbum CA ON CA.albumid = A.albumid\
+                    JOIN ArtistUserId AID ON AID.userid = CA.userid\
+                    WHERE PIS.userid = 6;"
+    result = sql_fetchall_cmd(get_playlist_sql)
+    context = {'user_id': user_id,
+                'result': result
+               }
+    print (result)
+    return render(request, 'user_info/playlist.html', context)
 
 def detail(request, user_id):
 
