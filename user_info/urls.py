@@ -10,4 +10,7 @@ urlpatterns = [
     path('<int:user_id>/detail/', views.detail, name='detail'),
     # /user_info/7/update/
     path('<int:user_id>/update/', views.update_age, name='update_age'),
+
+    #/user_info/7/show_songs/
+    path('<int:user_id>/show_songs/', views.show_songs, name='show_songs'),
 ]
