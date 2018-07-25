@@ -10,7 +10,7 @@ def user_info(request, user_id):
     return render(request, 'user_info/user_info.html', context)
 
 def display_playlist(request, user_id):
-    #Output playlist name, and all song-related info for user logged in
+    #3. JOIN QUERY:Output playlist name, and all song-related info for user logged in
     #result returns:playlistname, songname, stagename, albumname, tracklength
     get_playlist_sql = "SELECT PIS.playlistname, PIS.songname, AID.stagename, A.albumname, CS.tracklength \
                     FROM playlistincludessongs PIS \
@@ -18,12 +18,24 @@ def display_playlist(request, user_id):
                     JOIN Album A ON A.albumid = CS.albumid \
                     JOIN createalbum CA ON CA.albumid = A.albumid\
                     JOIN ArtistUserId AID ON AID.userid = CA.userid\
-                    WHERE PIS.userid = 6;"
-    result = sql_fetchall_cmd(get_playlist_sql)
+                    WHERE PIS.userid = {};".format(user_id)
+
+    #Find total number of songs in the user playlist
+    get_song_count = "SELECT COUNT(*) \
+                        FROM playlistincludessongs PIS \
+                        JOIN CreatePlaylist CP ON \
+    	                PIS.UserID = CP.UserID AND \
+    	                PIS.PlaylistName = CP.PlaylistName \
+                        JOIN ListenerUserID LID ON CP.UserID = LID.UserID \
+                        WHERE PIS.UserID = {}".format(user_id)
+
+    user_playlist = sql_fetchall_cmd(get_playlist_sql)
+    total_song_count_playlist = sql_fetchone_cmd(get_song_count)
+    #the 'user_id' gets passed to the template
     context = {'user_id': user_id,
-                'result': result
+                'result': user_playlist,
+                'song_count': total_song_count_playlist
                }
-    print (result)
     return render(request, 'user_info/playlist.html', context)
 
 def detail(request, user_id):
