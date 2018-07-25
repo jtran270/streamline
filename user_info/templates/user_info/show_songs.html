@@ -1,4 +1,4 @@
-<h1>Show songs by Genre</h1>
+<h1>Show all songs by Genre</h1>
 <a href="/user_info/{{ user_id }}/">Back</a>
 
 
@@ -14,9 +14,24 @@
             <option value="House">House</option>
             <option value="Pop">Pop</option>
             <option value="Techno">Techno</option>
-            <option value="Country">Country</option>
         </select>
     </label>
     <input type="submit" value="Select">
 </form>
 
+<h3>Genre: {{ selected_value }}</h3>
+
+<table style = "width: 100%; border: 1px solid black; padding: 15px; text-align: left">
+<tr>
+  <th> SongName </th>
+  <th> StageName </th>
+  <th> AlbumName </th>
+</tr>
+{% for row in result %}
+<tr>
+    <td> {{ row.0 }} </td>
+    <td> {{ row.1 }} </td>
+    <td> {{ row.2 }} </td>
+</tr>
+{% endfor %}
+</table>
