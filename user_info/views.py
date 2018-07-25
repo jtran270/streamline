@@ -108,3 +108,23 @@ def show_songs(request, user_id):
         selected_value = None
 
     return render(request, 'user_info/show_songs.html', {'selected_value': selected_value,'user_id': user_id})
+
+
+def nested_agg(request, user_id):
+    # Return the artist info and the name of their album that has more than 2 songs that are 3 minutes or longer
+    nested_agg_sql = "SELECT AN.stagename, AN.firstname, AN.lastname, A.albumname " \
+                     "FROM artistname AN " \
+                     "JOIN artistuserid AID ON AID.stagename = AN.stagename " \
+                     "JOIN createalbum CA ON CA.userid = AID.userid " \
+                     "JOIN album A ON A.albumid = CA.albumid " \
+                     "WHERE A.albumid IN  " \
+                     "( SELECT CS.albumid " \
+                     "FROM containsong CS " \
+                     "WHERE CS.tracklength >= \'00:03:00\' " \
+                     "GROUP BY CS.albumid " \
+                     "HAVING COUNT (*) > 2 ); "
+    print(nested_agg_sql)
+    result= sql_fetchall_cmd(nested_agg_sql)
+    context = {'user_id': user_id,
+               'result': result}
+    return render(request, 'user_info/lucky.html', context)

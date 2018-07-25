@@ -17,4 +17,7 @@ urlpatterns = [
     # /user_info/7/playlist/
     path('<int:user_id>/playlist/', views.display_playlist, name='display_playlist'),
 
+    # /user_info/7/lucky/
+    path('<int:user_id>/lucky/', views.nested_agg, name='nested_agg'),
+
 ]
