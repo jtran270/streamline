@@ -1,0 +1,24 @@
+<a href="/user_info/{{ user_id }}/">Back</a>
+<h1>Show All Users</h1>
+
+
+<form action="." method="post">
+    {% csrf_token %}
+    <label>
+        <select name="select_users">
+            <option selected="selected" disabled>Choose:</option>
+            <option value="email">By Email</option>
+            <option value="firstname">By First Name</option>
+            <option value="lastname">By Last Name</option>
+        </select>
+    </label>
+    <input type="submit" value="Select">
+</form>
+
+
+{% if result %}
+    {% for row in result %}
+        <body> {{ row.0 }} </body>
+        <br><br>
+    {% endfor %}
+{% endif %}

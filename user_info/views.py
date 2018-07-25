@@ -128,3 +128,24 @@ def nested_agg(request, user_id):
     context = {'user_id': user_id,
                'result': result}
     return render(request, 'user_info/lucky.html', context)
+
+
+def show_all_users(request, user_id):
+
+    if "select_users" in request.POST:
+        selected_value = request.POST["select_users"]
+
+        get_users_sql = "SELECT {} FROM {} ;".format(selected_value, LISTENER_USERID)
+
+        print(get_users_sql)
+        result = sql_fetchall_cmd(get_users_sql)
+        context = {'user_id': user_id,
+                   'selected_value': selected_value,
+                   'result': result}
+        return render(request, 'user_info/all_users.html', context)
+
+    else:
+        selected_value = None
+
+    return render(request, 'user_info/all_users.html', {'selected_value': selected_value,'user_id': user_id})
+
