@@ -22,7 +22,7 @@
 <h4>Total number of songs for current user in all playlists</h4>
 <p>{{ song_count.0 }}</p>
 
-<form action="/user_info/{{ user_id }}/playlist/">
+<form method = "POST" action="/user_info/{{ user_id }}/playlist/">
 Song you want to remove from playlist: <br></br><input type="text" name="remove_from_playlist" placeholder="Get rid of song"><br>
 <input type="submit" value="Submit">
 </form>

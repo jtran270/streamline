@@ -9,7 +9,6 @@ def user_info(request, user_id):
     context = {'user_id': user_id}
     return render(request, 'user_info/user_info.html', context)
 
-
 def display_playlist(request, user_id):
     #3. JOIN QUERY:Output playlist name, and all song-related info for user logged in
     #result returns:playlistname, songname, stagename, albumname, tracklength
@@ -21,7 +20,7 @@ def display_playlist(request, user_id):
                     JOIN ArtistUserId AID ON AID.userid = CA.userid\
                     WHERE PIS.userid = {};".format(user_id)
 
-    #Find total number of songs in the user playlist
+    #4. Aggregation query: Find total number of songs in the user playlist
     get_song_count = "SELECT COUNT(*) \
                         FROM playlistincludessongs PIS \
                         JOIN CreatePlaylist CP ON \
@@ -40,8 +39,17 @@ def display_playlist(request, user_id):
                 'result': user_playlist,
                 'song_count': total_song_count_playlist
                }
+    #-------------------- delete song from playlist  -------------------#
+    if request.method == 'POST':
+        song_to_delete = request.POST.get('remove_from_playlist', None)
+        song_to_delete_sql = "DELETE FROM playlistincludessongs \
+                        WHERE UserID = {} \
+        	            AND SongName = \'{}\' ;".format(user_id,song_to_delete)
+        delete_sql = sql_fetchone_cmd(song_to_delete_sql)
+        print ("Executed delete command: {}".format(delete_sql))
+            #return redirect("/user_info/{{ user_id }}/playlist/")
+    #-------------------- delete song from playlist END -------------------#
     return render(request, 'user_info/playlist.html', context)
-
 
 def detail(request, user_id):
 
@@ -92,63 +100,29 @@ def show_songs(request, user_id):
     if "select_genre" in request.POST:
         selected_value = request.POST["select_genre"]
 
-        get_songs_by_genre_sql = "SELECT CS.SongName, AID.stagename, A.albumname " \
-                                 "FROM ContainSong CS " \
-                                 "JOIN havesongs HS ON HS.albumid = CS.albumid AND HS.songname = CS.songname " \
-                                 "JOIN Album A ON A.albumid = CS.albumid " \
-                                 "JOIN createalbum CA ON CA.albumid = A.albumid " \
-                                 "JOIN ArtistUserId AID ON AID.userid = CA.userid " \
-                                 "WHERE HS.genrename = \'{}\';".format(selected_value)
-        print(get_songs_by_genre_sql)
-        song_details = sql_fetchall_cmd(get_songs_by_genre_sql)
+        # context = {'user_id': user_id,
+        #            'selected_value': selected_value}
+        #
+        # get_user_sql = "SELECT {} FROM {} " \
+        #                "WHERE UserId = {};".format(selected_value, LISTENER_USERID, user_id)
+        #
+        #
+        # print(get_user_sql)
+        # result = sql_fetchall_cmd(get_user_sql)
+        # response = result[0]
 
-        context = {'user_id': user_id,
-                   'selected_value': selected_value,
-                   'result': song_details}
-        return render(request, 'user_info/show_songs.html', context)
+        # if selected_value == 'email':
+        #     context['email'] = response
+        # elif selected_value == 'firstname':
+        #     context['firstname'] = response
+        # elif selected_value == 'lastname':
+        #     context['lastname'] = response
+        # elif selected_value == 'age':
+        #     context['age'] = response
+
+        return render(request, 'user_info/show_songs.html', {'user_id': user_id})
 
     else:
         selected_value = None
 
     return render(request, 'user_info/show_songs.html', {'selected_value': selected_value,'user_id': user_id})
-
-
-def nested_agg(request, user_id):
-    # Return the artist info and the name of their album that has more than 2 songs that are 3 minutes or longer
-    nested_agg_sql = "SELECT AN.stagename, AN.firstname, AN.lastname, A.albumname " \
-                     "FROM artistname AN " \
-                     "JOIN artistuserid AID ON AID.stagename = AN.stagename " \
-                     "JOIN createalbum CA ON CA.userid = AID.userid " \
-                     "JOIN album A ON A.albumid = CA.albumid " \
-                     "WHERE A.albumid IN  " \
-                     "( SELECT CS.albumid " \
-                     "FROM containsong CS " \
-                     "WHERE CS.tracklength >= \'00:03:00\' " \
-                     "GROUP BY CS.albumid " \
-                     "HAVING COUNT (*) > 2 ); "
-    print(nested_agg_sql)
-    result= sql_fetchall_cmd(nested_agg_sql)
-    context = {'user_id': user_id,
-               'result': result}
-    return render(request, 'user_info/lucky.html', context)
-
-
-def show_all_users(request, user_id):
-
-    if "select_users" in request.POST:
-        selected_value = request.POST["select_users"]
-
-        get_users_sql = "SELECT {} FROM {} ;".format(selected_value, LISTENER_USERID)
-
-        print(get_users_sql)
-        result = sql_fetchall_cmd(get_users_sql)
-        context = {'user_id': user_id,
-                   'selected_value': selected_value,
-                   'result': result}
-        return render(request, 'user_info/all_users.html', context)
-
-    else:
-        selected_value = None
-
-    return render(request, 'user_info/all_users.html', {'selected_value': selected_value,'user_id': user_id})
-
