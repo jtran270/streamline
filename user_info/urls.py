@@ -10,4 +10,6 @@ urlpatterns = [
     path('<int:user_id>/detail/', views.detail, name='detail'),
     # /user_info/7/update/
     path('<int:user_id>/update/', views.update_age, name='update_age'),
+    # /user_info/7/playlist/
+    path('<int:user_id>/playlist/', views.display_playlist, name='display_playlist'),
 ]
