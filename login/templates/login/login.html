@@ -7,7 +7,7 @@
 
 <form method="POST" action="/login/">
 {% csrf_token %}
-<input type="text" name="user_email"><br>
-<input type="text" name="password">
+<input type="text" name="user_email" placeholder="Email"><br>
+<input type="text" name="password" placeholder="Password">
 <button type="submit">Login</button>
 </form>

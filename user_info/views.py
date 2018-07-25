@@ -31,6 +31,9 @@ def display_playlist(request, user_id):
 
     user_playlist = sql_fetchall_cmd(get_playlist_sql)
     total_song_count_playlist = sql_fetchone_cmd(get_song_count)
+
+    print(user_playlist)
+    print(total_song_count_playlist)
     #the 'user_id' gets passed to the template
     context = {'user_id': user_id,
                 'result': user_playlist,
