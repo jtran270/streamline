@@ -1,31 +1,19 @@
---HOW TO RUN .sql FILES:
-./psql --username=sl_admin -f C:/School/'SFU 3'/streamline/sqlTest.sql streamline_db
-./psql --username=sl_admin
-
-
-
-
--- JOIN:
+-- SELECT:
 -- Find name of playlist created by the listener
 SELECT PlaylistName
 FROM CreatePlaylist
 WHERE CreatePlaylist.UserID = getUserID() -- UserID passed from view
 
 
+-- JOIN:
 -- Output playlist name, and all song-related info for user logged in
-SELECT PIS.playlistname, PIS.songname, AID.stagename, A.albumname, CS.tracklength
+SELECT PIS.songname, AID.stagename, A.albumname, CS.tracklength
 FROM playlistincludessongs PIS
 JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname
 JOIN Album A ON A.albumid = CS.albumid 
 JOIN createalbum CA ON CA.albumid = A.albumid
 JOIN ArtistUserId AID ON AID.userid = CA.userid
-WHERE PIS.userid = 6 -- (replace with ID of user logged in) or...
--- WHERE PIS.playlistname = 'Chill' --(replace with playlist name)
-
-
-
--- **** select all playlists from that user
-
+WHERE PIS.playlistname = 'Babe coming over' --(replace with playlistname)
 
 
 -- Find all songs under chosen genre
@@ -68,6 +56,8 @@ WHERE A.albumid IN (
 	)
 
 
+
+
 -- UPDATE:
 -- Change all Artist StageName to StageNameEdit (input)
 UPDATE ArtistUserID
@@ -77,6 +67,8 @@ WHERE StageName = 'JCUBE' --input1
 UPDATE ArtistName
 SET StageName = 'JCUBE2' --input2
 WHERE StageName = 'JCUBE' --input1
+
+
 
 
 -- DELETE:
@@ -103,19 +95,20 @@ INSERT INTO playlistincludessongs VALUES (2, 'Trap Nation', 9, 'Favorites')
 -- Return songs and their info that are in ALL of playlists 
 -- select song names such that there is no user that does not have the song in their playlist"
 SELECT DISTINCT CS.SongName, AID.stagename, A.albumname, CS.tracklength
-FROM playlistincludessongs PIS
-JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname
+FROM containsong CS 
+JOIN playlistincludessongs PIS ON PIS.songname = CS.songname AND PIS.albumid = CS.albumid
 JOIN Album A ON A.albumid = CS.albumid 
 JOIN createalbum CA ON CA.albumid = A.albumid
 JOIN ArtistUserId AID ON AID.userid = CA.userid
 
 WHERE NOT EXISTS (
-	(SELECT CP.UserID FROM CreatePlaylist CP)
+	(SELECT CP.UserID, CP.playlistname FROM CreatePlaylist CP)
 	EXCEPT
-	(SELECT PIS.userid 
-	FROM playlistincludessongs PIS
+	(SELECT PIS.userid, PIS.playlistname
+	FROM playlistincludessongs PIS, createplaylist CP
 	WHERE PIS.SongName = CS.SongName AND 
-		PIS.AlbumID = CS.AlbumID)
+		PIS.playlistname = CP.playlistname AND
+		PIS.userid = CP.userid)
 )
 
 
@@ -127,3 +120,17 @@ INSERT INTO playlistincludessongs VALUES (1, 'Bliss', 9, 'Moms home playlist');
 INSERT INTO playlistincludessongs VALUES (1, 'Bliss', 10, 'Gospels only Praise the Holy Father');
 INSERT INTO playlistincludessongs VALUES (1, 'Bliss', 9, 'Favorites');
 */
+
+
+/* test queries 
+DELETE FROM playlistincludessongs
+WHERE playlistname = 'Chill' AND songname = 'Bliss'
+
+INSERT INTO playlistincludessongs VALUES (1, 'Bliss', 6, 'Chill');
+
+SELECT * FROM playlistincludessongs
+WHERE songname = 'Bliss'
+ORDER BY userid
+*/
+
+

@@ -27,21 +27,34 @@ def display_playlist(request, user_id):
     return render(request, 'user_info/playlist.html', context)
 
 def detail(request, user_id):
-    get_user_sql = "SELECT * FROM {} " \
-                   "WHERE UserId = {};".format(LISTENER_USERID, user_id)
-    print(get_user_sql)
-    result = sql_fetchone_cmd(get_user_sql)
-    # print(result)
 
-    # result returns a tuple representing a row. Grab values according the order
-    # in this schema: listener_user_id (User_ID,Email,First_Name,Last_Name,Age)
-    context = {'user_id': result[0],
-               'email': result[1],
-               'first_name': result[2],
-               'last_name': result[3],
-               'age': result[4]}
+    if "select_detail" in request.POST:
+        selected_value = request.POST["select_detail"]
 
-    return render(request, 'user_info/detail.html', context)
+        context = {'user_id': user_id,
+                   'selected_value': selected_value}
+
+        get_user_sql = "SELECT {} FROM {} " \
+                       "WHERE UserId = {};".format(selected_value, LISTENER_USERID, user_id)
+        print(get_user_sql)
+        result = sql_fetchone_cmd(get_user_sql)
+        response = result[0]
+
+        if selected_value == 'email':
+            context['email'] = response
+        elif selected_value == 'firstname':
+            context['firstname'] = response
+        elif selected_value == 'lastname':
+            context['lastname'] = response
+        elif selected_value == 'age':
+            context['age'] = response
+
+        return render(request, 'user_info/detail.html', context)
+
+    else:
+        selected_value = None
+
+    return render(request, 'user_info/detail.html', {'selected_value': selected_value,'user_id': user_id})
 
 
 def update_age(request, user_id):
