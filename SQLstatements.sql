@@ -102,15 +102,23 @@ JOIN createalbum CA ON CA.albumid = A.albumid
 JOIN ArtistUserId AID ON AID.userid = CA.userid
 WHERE 
 	NOT EXISTS (
-		(SELECT CP.UserID, CP.playlistname FROM CreatePlaylist CP)
+		(SELECT CP.UserID, CP.playlistname
+		FROM CreatePlaylist CP
+		WHERE CP.playlistname IN (
+			SELECT playlistname
+			FROM createplaylist
+			WHERE userid = 9) --make this value the userID from login page
+		)
+
 		EXCEPT
+
 		(SELECT PIS.userid, PIS.playlistname
 		FROM playlistincludessongs PIS, createplaylist CP
-		WHERE PIS.SongName = CS.SongName AND 
+		WHERE PIS.SongName = CS.SongName AND
 			PIS.playlistname = CP.playlistname AND
 			PIS.userid = CP.userid)
 	)
-	AND PIS.userid = 6 --make this value the userID from login page
+
 
 /* insert all of these first before querying
 INSERT INTO playlistincludessongs VALUES (1, 'Bliss', 6, 'Chill');
