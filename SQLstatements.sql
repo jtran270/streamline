@@ -41,19 +41,26 @@ WHERE PIS.UserID = 6
 
 
 -- NESTED AGGREGATE WITH GROUP-BY:
--- Return the artist info and the name of their album that has more than 2 songs that are 3 minutes or longer
-SELECT AN.stagename, AN.firstname, AN.lastname, A.albumname
-FROM artistname AN
-JOIN artistuserid AID ON AID.stagename = AN.stagename
-JOIN createalbum CA ON CA.userid = AID.userid
-JOIN album A ON A.albumid = CA.albumid
-WHERE A.albumid IN (
-		SELECT CS.albumid
-		FROM containsong CS
-		WHERE CS.tracklength >= '00:03:00'
-		GROUP BY CS.albumid
-		HAVING COUNT(*) > 2
-	)
+-- Return user's playlist and number of songs in those playlists by a specific artist (stagename)
+SELECT PIS.playlistname, AID.stagename, COUNT(*)
+FROM playlistincludessongs PIS
+JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname
+JOIN havesongs HS ON HS.albumid = CS.albumid AND HS.songname = CS.songname
+JOIN album A ON A.albumid = CS.albumid
+JOIN createalbum CA ON CA.albumid = A.albumid
+JOIN artistuserid AID ON AID.userid = CA.userid
+WHERE PIS.userid = 9 AND AID.stagename = 'a' --pass values for userID and artist's stagename
+GROUP BY PIS.playlistname, AID.stagename
+
+
+
+/* insert these before running query
+INSERT INTO havesongs VALUES (5, '7-11', 'House');
+INSERT INTO havesongs VALUES (4, 'BossMama', 'House');
+INSERT INTO havesongs VALUES (1, 'Bliss', 'Trap');
+INSERT INTO havesongs VALUES (3, 'I am a sinner', 'Rap');
+INSERT INTO havesongs VALUES (2, 'Cries', 'Trap');
+*/
 
 
 
