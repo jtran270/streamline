@@ -17,6 +17,10 @@ def sql_fetchall_cmd(query):
         row = cursor.fetchall()
     return row
 
+def sql_delete_cmd(query):
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+
 
 def sql_update_cmd(query):
     with connection.cursor() as cursor:

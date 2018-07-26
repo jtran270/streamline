@@ -23,6 +23,7 @@
 <p>{{ song_count.0 }}</p>
 
 <form method = "POST" action="/user_info/{{ user_id }}/playlist/">
+{% csrf_token %}
 Song you want to remove from playlist: <br></br><input type="text" name="remove_from_playlist" placeholder="Get rid of song"><br>
 <input type="submit" value="Submit">
 </form>
