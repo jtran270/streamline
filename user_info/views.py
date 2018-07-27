@@ -15,8 +15,11 @@ def user_info(request, user_id):
 
 
 def display_playlist(request, user_id):
-    # 3. JOIN QUERY:Output playlist name, and all song-related info for user logged in
-    # result returns:playlistname, songname, stagename, albumname, tracklength
+    context = {'user_id': user_id}
+    
+    # setting it to empty so passing 'context' values won't say variable undefined
+    #number_songs_by_artist_result = ''
+    
     get_playlist_sql = "SELECT PIS.playlistname, PIS.songname, AID.stagename, A.albumname, CS.tracklength " \
                        "FROM playlistincludessongs PIS " \
                        "JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname " \
@@ -35,19 +38,38 @@ def display_playlist(request, user_id):
                      "WHERE PIS.UserID = {}".format(user_id)
 
     user_playlist = sql_fetchall_cmd(get_playlist_sql)
+    
     total_song_count_playlist = sql_fetchone_cmd(get_song_count)
-    print(get_playlist_sql)
-    print(get_song_count )
+    
     # print(user_playlist)
     # print(total_song_count_playlist)
-    # the 'user_id' gets passed to the template
-    context = {'user_id': user_id,
-               'result': user_playlist,
-               'song_count': total_song_count_playlist
-               }
+    context['result'] =  user_playlist
+    context['song_count'] = total_song_count_playlist
+
+    # ----- Return user's playlist and number of songs in those playlists by a specific artist (stagename)
+    if (request.method == 'POST' and 'stage_name' in request.POST):
+        stage_name = request.POST.get('stage_name', None)
+        print(stage_name)
+        number_songs_by_artist_sql = "SELECT PIS.playlistname, AID.stagename, COUNT(*) \
+                                    FROM playlistincludessongs PIS \
+                                    JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname \
+                                    JOIN havesongs HS ON HS.albumid = CS.albumid AND HS.songname = CS.songname \
+                                    JOIN album A ON A.albumid = CS.albumid \
+                                    JOIN createalbum CA ON CA.albumid = A.albumid \
+                                    JOIN artistuserid AID ON AID.userid = CA.userid \
+                                    WHERE PIS.userid = {} AND AID.stagename = \'{}\' \
+                                    GROUP BY PIS.playlistname, AID.stagename;".format(user_id,stage_name)
+        # returns playlistname, stagename, count
+        number_songs_by_artist_result = sql_fetchall_cmd(number_songs_by_artist_sql)
+        print (number_songs_by_artist_result)
+
+        
+        context[ 'num_songs'] =  number_songs_by_artist_result
+        return render(request, 'user_info/playlist.html', context)   
     # -------------------- delete song from playlist  -------------------#
 
-    if request.method == 'POST':
+    if request.method == 'POST' and "remove_playlist" in request.POST:
+        print("I got here")
         playlist_to_delete = request.POST.get('remove_playlist', None)
         print(playlist_to_delete)
         playlist_to_delete_sql = "DELETE FROM createplaylist " \
@@ -57,9 +79,10 @@ def display_playlist(request, user_id):
         print ("Executed delete command")
         # redirects back to itself
         return redirect('.')
+        # return render(request, 'user_info/playlist.html', context)   
         # -------------------- delete song from playlist END -------------------#
-    return render(request, 'user_info/playlist.html', context)
 
+    return render(request, 'user_info/playlist.html', context)
 
 def detail(request, user_id):
 

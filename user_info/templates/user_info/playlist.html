@@ -30,6 +30,26 @@ Playlists You want to delete: <br></br><input type="text" name="remove_playlist"
 <input type="submit" value="Submit">
 </form>
 
+<form method = "POST" action="/user_info/{{ user_id }}/playlist/">
+  {% csrf_token %}
+  Find number of songs in playlists by a specific artist: <br></br><input type="text" name="stage_name" placeholder="Stage Name"><br>
+  <input type="submit" value="Submit">
+</form>
+
+<table style = "width: 100%; border: 1px solid black; padding: 15px; text-align: left">
+  <tr>
+    <th> PlayListName </th>
+    <th> StageName </th>
+    <th> Count </th>
+  </tr>
+  {% for s in num_songs %}
+  <tr>
+      <td> {{ s.0 }} </td>
+      <td> {{ s.1 }} </td>
+      <td> {{ s.2 }} </td>
+  </tr>
+  {% endfor %}
+  </table>
 
 </body>
 </html>
