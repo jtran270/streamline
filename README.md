@@ -1,49 +1,64 @@
 MAC SETUP
-------------------------------------------------------------------
-####  Set up your database
-------------------------------------------------------------------
-1. In terminal: type 'psql'
-2. In postgresql: 
+
+####  DEPENDENCIES INSTALLATION:
+1. Install Python 3. Make sure you have PIP as well.
+2. Install PostgreSQL 10 : https://postgresapp.com
+3. Install Django 2. In terminal:
+```
+pip3 install django
+```
+4. Install psycopg2. In terminal:
+```
+pip3 install psycopg2
+```
+####  SET UP STREAMLINE DATABASE
+
+1. In Terminal: type 'psql'
+2. In PostgreSQL terminal session. Run prepare_script.sql. This will create a new user sl_admin and the database. 
 ```
 your_username=#  \i path/to/file/streamline/prepare_script.sql
 ```
 
 3. Type \q to quit psql
 
-4. Sign back in again using the User you just created in prepare_script.
+4. Sign back in again using the User you just created in prepare_script.sql.
+This is important because PostgreSQL is very restricted in terms of database Owners.
+
 In terminal: 
 ```
 psql -d streamline_db -U sl_admin
 ```
 
-5. Create tables:
-
+5. Create tables and insert data:
 ```
 streamline_db=> \i /path/to/file/streamline/create_database_script.sql
 streamline_db=> \i /path/to/file/streamline/insert_all_data.sql
 ```
 
-------------------------------------------------------------------
-####  Set up your website
-------------------------------------------------------------------
-1. cd to streamline repo
+####  RUN WEBSITE
+
+1. cd to streamline directory
 2. Run migration to create Django-specific tables in your database
 
 ```
 python3 manage.py migrate
 ```
 
-3. Should be ready to run now:
+3. Run server
 ```
 python3 manage.py runserver
 ```
-
+4. In a web browser, navigate to login page:
+```
+http://127.0.0.1:8000/login
+```
+Welcome to Streamline!
 
 
 WINDOWS SETUP
-------------------------------------------------------------------
-INSTALLATION:
-------------------------------------------------------------------
+
+#### DEPENDENCIES INSTALLATION:
+
 Install Python (3.5) and PyCharm
 ```
 https://www.jetbrains.com/pycharm/download/#section=windows
@@ -59,9 +74,9 @@ pip install psycopg2
 NOTE: You may require Visual Studio 10 and/or .NET Framework 4.
 
 
-------------------------------------------------------------------
-RUNNING THE DATABASE:
-------------------------------------------------------------------
+
+####  RUNNING THE DATABASE:
+
 In PowerShell/cmd, browse to the PostgreSQL installation directory. 
 Windows 10 default is C:\Program Files\PostgreSQL
 
@@ -95,9 +110,9 @@ The following commands setup the database in order as described:
 ./psql --username=sl_admin -f C:\School\'SFU 3'\streamline\insert_all_data.sql streamline_db
 ```
 
-------------------------------------------------------------------
-ACCESSING WEBSITE:
-------------------------------------------------------------------
+
+####  ACCESSING WEBSITE:
+
 In PyCharm, go to the terminal view cd to the project file directory, then run migration to create Django-specific tables in your database:
 ```
 python manage.py migrate
@@ -110,9 +125,9 @@ http://127.0.0.1:8000/login
 ```
 
 
-------------------------------------------------------------------
-RUNNING SQL QUERIES:
-------------------------------------------------------------------
+
+####  RUNNING SQL QUERIES:
+
 
 OPTION 1: USING POSTGRESQL GUI
 
@@ -144,9 +159,9 @@ If you want to run a .sql file with multiple queries in them:
 ```
 
 
-------------------------------------------------------------------
-RESETTING
-------------------------------------------------------------------
+
+####  RESETTING
+
 If you ever need to reset the entire program and the database, follow these steps:
 
 ```
