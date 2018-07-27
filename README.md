@@ -1,3 +1,11 @@
+# LOGIN CREDENTIALS
+
+### UserID:Password
+~~~
+dog@dog.com:12345
+cat@cat.com:12345
+~~~
+
 
 # MAC SETUP
 
@@ -99,15 +107,15 @@ The following commands setup the database in order as described:
 
 1. Create user sl_admin with appropriate privileges
 ```
-./psql --username=postgres -f <path_to_file>/streamline\prepare_script.sql
+./psql --username=postgres -f <path_to_file>\streamline\prepare_script.sql
 ```
 2. Create all tables for the database with the created user 'sl_admin'
 ```
-./psql --username=sl_admin -f <path_to_file>/streamline\create_database_script.sql streamline_db
+./psql --username=sl_admin -f <path_to_file>\streamline\create_database_script.sql streamline_db
 ```
 3. Populate tables with data
 ```
-./psql --username=sl_admin -f C:\School\'SFU 3'\streamline\insert_all_data.sql streamline_db
+./psql --username=sl_admin -f <path_to_file>\streamline\insert_all_data.sql streamline_db
 ```
 
 
@@ -178,9 +186,9 @@ GRANT ALL ON SCHEMA public TO public;
 \q
 
 
-./psql --username=postgres -f C:\School\'SFU 3'\streamline\prepare_script.sql
-./psql --username=sl_admin -f C:\School\'SFU 3'\streamline\create_database_script.sql streamline_db
-./psql --username=sl_admin -f C:\School\'SFU 3'\streamline\insert_all_data.sql streamline_db
+./psql --username=postgres -f <path_to_file>\streamline\prepare_script.sql
+./psql --username=sl_admin -f <path_to_file>\streamline\create_database_script.sql streamline_db
+./psql --username=sl_admin -f <path_to_file>\streamline\insert_all_data.sql streamline_db
 
 
 cd <streamline_directory>
