@@ -1,5 +1,4 @@
-LINUX SETUP
-
+MAC SETUP
 ------------------------------------------------------------------
 ####  Set up your database
 ------------------------------------------------------------------
@@ -21,6 +20,7 @@ psql -d streamline_db -U sl_admin
 
 ```
 streamline_db=> \i /path/to/file/streamline/create_database_script.sql
+streamline_db=> \i /path/to/file/streamline/insert_all_data.sql
 ```
 
 ------------------------------------------------------------------
@@ -80,15 +80,20 @@ host    replication     all             127.0.0.1/32            trust
 host    replication     all             ::1/128                 trust
 ```
 
-Execute the following commands in command line to set up the DB:
-```
-./psql --username=postgres
-\i <path_to_file>\streamline\prepare_script.sql
-\q
-./psql -d streamline_db -U sl_admin
-\i <path_to_file>\streamline\create_database_script.sql
-```
+The following commands setup the database in order as described:
 
+1. Create user sl_admin with appropriate privileges
+```
+./psql --username=postgres -f <path_to_file>/streamline\prepare_script.sql
+```
+2. Create all tables for the database with the created user 'sl_admin'
+```
+./psql --username=sl_admin -f <path_to_file>/streamline\create_database_script.sql streamline_db
+```
+3. Populate tables with data
+```
+./psql --username=sl_admin -f C:\School\'SFU 3'\streamline\insert_all_data.sql streamline_db
+```
 
 ------------------------------------------------------------------
 ACCESSING WEBSITE:
@@ -138,3 +143,37 @@ If you want to run a .sql file with multiple queries in them:
 ./psql --username=sl_admin -f <path_to_file>/streamline/<filename>.sql streamline_db
 ```
 
+
+------------------------------------------------------------------
+RESETTING
+------------------------------------------------------------------
+If you ever need to reset the entire program and the database, follow these steps:
+
+```
+cd <PostgreSQL_directory>\bin
+./psql --username=postgres
+
+
+DROP OWNED BY sl_admin;
+DROP USER IF EXISTS sl_admin;
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
+\q
+
+
+./psql --username=postgres -f C:\School\'SFU 3'\streamline\prepare_script.sql
+./psql --username=sl_admin -f C:\School\'SFU 3'\streamline\create_database_script.sql streamline_db
+./psql --username=sl_admin -f C:\School\'SFU 3'\streamline\insert_all_data.sql streamline_db
+
+
+cd <streamline_directory>
+python manage.py migrate
+python manage.py runserver
+```
+
+Then access the website via the link:
+```
+http://127.0.0.1:8000/login
+```

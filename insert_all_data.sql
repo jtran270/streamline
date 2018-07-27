@@ -21,7 +21,6 @@
 //
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-//               佛祖保佑         永无BUG
 //
 */
 -- Delete from tables if there are any existing values
