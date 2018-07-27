@@ -1,0 +1,21 @@
+
+<h1>Songs that appear in all of your playlists:</h1>
+<br>
+<a href="/user_info/{{ user_id }}/playlist/">Back</a>
+<br><br>
+<table style = "width: 100%; border: 1px solid black; padding: 15px; text-align: left">
+    <tr>
+        <th> SongName </th>
+        <th> StageName </th>
+        <th> AlbumName </th>
+        <th> TrackLength </th>
+    </tr>
+    {% for s in songs_appear_in_all %}
+    <tr>
+        <td> {{ s.0 }} </td>
+        <td> {{ s.1 }} </td>
+        <td> {{ s.2 }} </td>
+        <td> {{ s.3 }} </td>
+    </tr>
+    {% endfor %}
+</table>
