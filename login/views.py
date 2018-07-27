@@ -10,7 +10,6 @@ def login(request):
         user_email = request.POST.get('user_email', None)
         password = request.POST.get('password', None)
 
-
         login_sql = "SELECT Email,password FROM {} WHERE Email = \'{}\' AND "\
                     "password = \'{}\';".format(LISTENER_EMAIL, user_email, password)
 

@@ -66,6 +66,8 @@ def display_playlist(request, user_id):
         
         context[ 'num_songs'] =  number_songs_by_artist_result
         return render(request, 'user_info/playlist.html', context)   
+
+
     # -------------------- delete song from playlist  -------------------#
 
     if request.method == 'POST' and "remove_playlist" in request.POST:
@@ -76,7 +78,7 @@ def display_playlist(request, user_id):
                                  "WHERE userid = {} " \
                                  "AND playlistname = \'{}\';".format(user_id,playlist_to_delete)
         sql_delete_cmd(playlist_to_delete_sql)
-        print ("Executed delete command")
+        print("Executed delete command")
         # redirects back to itself
         return redirect('.')
         # return render(request, 'user_info/playlist.html', context)   
@@ -191,3 +193,39 @@ def show_all_users(request, user_id):
         selected_value = None
 
     return render(request, 'user_info/all_users.html', {'selected_value': selected_value,'user_id': user_id})
+
+
+def songs_in_all(request, user_id):
+    # -------------------- Show songs that appear in all playlists  -------------------#
+    # DIVISION QUERY:
+    songs_appear_in_all_sql = "SELECT DISTINCT CS.SongName, AID.stagename, A.albumname, CS.tracklength " \
+                              "FROM containsong CS " \
+                              "JOIN playlistincludessongs PIS ON PIS.songname = CS.songname " \
+                              "AND PIS.albumid = CS.albumid " \
+                              "JOIN Album A ON A.albumid = CS.albumid " \
+                              "JOIN createalbum CA ON CA.albumid = A.albumid " \
+                              "JOIN ArtistUserId AID ON AID.userid = CA.userid " \
+                              "WHERE " \
+                              "NOT EXISTS (" \
+                              "(SELECT CP.UserID, CP.playlistname " \
+                              "FROM CreatePlaylist CP " \
+                              "WHERE CP.playlistname IN ( " \
+                              "SELECT playlistname " \
+                              "FROM createplaylist " \
+                              "WHERE userid = {}) " \
+                              ") " \
+                              "EXCEPT " \
+                              "(SELECT PIS.userid, PIS.playlistname " \
+                              "FROM playlistincludessongs PIS, createplaylist CP " \
+                              "WHERE PIS.SongName = CS.SongName AND " \
+                              "PIS.playlistname = CP.playlistname AND " \
+                              "PIS.userid = CP.userid) " \
+                              ");".format(user_id)
+
+    songs_appear_in_all = sql_fetchall_cmd(songs_appear_in_all_sql)
+    print(songs_appear_in_all)
+    context = {'user_id': user_id,
+               'songs_appear_in_all': songs_appear_in_all
+               }
+
+    return render(request, 'user_info/songs_in_all.html', context)

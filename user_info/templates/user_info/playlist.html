@@ -4,30 +4,33 @@
 <a href="/user_info/{{ user_id }}/">Back</a>
 <br><br>
 <table style = "width: 100%; border: 1px solid black; padding: 15px; text-align: left">
-<tr>
-  <th> PlayListName </th>
-  <th> SongName </th>
-  <th> StageName </th>
-  <th> AlbumName </th>
-  <th> TrackLength </th>
-</tr>
-{% for row in result %}
-<tr>
-    <td> {{ row.0 }} </td>
-    <td> {{ row.1 }} </td>
-    <td> {{ row.2 }} </td>
-    <td> {{ row.3 }} </td>
-    <td> {{ row.4 }} </td>
-</tr>
-{% endfor %}
+    <tr>
+        <th> PlayListName </th>
+        <th> SongName </th>
+        <th> StageName </th>
+        <th> AlbumName </th>
+        <th> TrackLength </th>
+    </tr>
+    {% for row in result %}
+    <tr>
+        <td> {{ row.0 }} </td>
+        <td> {{ row.1 }} </td>
+        <td> {{ row.2 }} </td>
+        <td> {{ row.3 }} </td>
+        <td> {{ row.4 }} </td>
+    </tr>
+    {% endfor %}
 </table>
-<h4>Total number of songs for current user in all playlists</h4>
-<p>{{ song_count.0 }}</p>
 
+
+<br><br>
+<a href="/user_info/{{ user_id }}/playlist/songs_in_all/">See songs that appear in all of your playlists:</a>
+
+<br><br>
 <form method = "POST" action="/user_info/{{ user_id }}/playlist/">
-{% csrf_token %}
-Playlists You want to delete: <br></br><input type="text" name="remove_playlist" placeholder="Get rid of playlist"><br>
-<input type="submit" value="Submit">
+    {% csrf_token %}
+    <h4>Playlist You want to delete:</h4> <input type="text" name="remove_playlist" placeholder="Get rid of playlist"><br>
+    <input type="submit" value="Submit">
 </form>
 
 <form method = "POST" action="/user_info/{{ user_id }}/playlist/">
