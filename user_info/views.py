@@ -15,48 +15,50 @@ def user_info(request, user_id):
 
 
 def display_playlist(request, user_id):
-    #3. JOIN QUERY:Output playlist name, and all song-related info for user logged in
-    #result returns:playlistname, songname, stagename, albumname, tracklength
-    get_playlist_sql = "SELECT PIS.playlistname, PIS.songname, AID.stagename, A.albumname, CS.tracklength \
-                    FROM playlistincludessongs PIS \
-                    JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname \
-                    JOIN Album A ON A.albumid = CS.albumid \
-                    JOIN createalbum CA ON CA.albumid = A.albumid\
-                    JOIN ArtistUserId AID ON AID.userid = CA.userid\
-                    WHERE PIS.userid = {};".format(user_id)
+    # 3. JOIN QUERY:Output playlist name, and all song-related info for user logged in
+    # result returns:playlistname, songname, stagename, albumname, tracklength
+    get_playlist_sql = "SELECT PIS.playlistname, PIS.songname, AID.stagename, A.albumname, CS.tracklength " \
+                       "FROM playlistincludessongs PIS " \
+                       "JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname " \
+                       "JOIN Album A ON A.albumid = CS.albumid " \
+                       "JOIN createalbum CA ON CA.albumid = A.albumid " \
+                       "JOIN ArtistUserId AID ON AID.userid = CA.userid " \
+                       "WHERE PIS.userid = {};".format(user_id)
 
-    #Find total number of songs in the user playlist
-    get_song_count = "SELECT COUNT(*) \
-                        FROM playlistincludessongs PIS \
-                        JOIN CreatePlaylist CP ON \
-    	                PIS.UserID = CP.UserID AND \
-    	                PIS.PlaylistName = CP.PlaylistName \
-                        JOIN ListenerUserID LID ON CP.UserID = LID.UserID \
-                        WHERE PIS.UserID = {}".format(user_id)
+    # Find total number of songs in the user playlist
+    get_song_count = "SELECT COUNT(*) " \
+                     "FROM playlistincludessongs PIS " \
+                     "JOIN CreatePlaylist CP ON " \
+                     "PIS.UserID = CP.UserID AND " \
+                     "PIS.PlaylistName = CP.PlaylistName " \
+                     "JOIN ListenerUserID LID ON CP.UserID = LID.UserID " \
+                     "WHERE PIS.UserID = {}".format(user_id)
 
     user_playlist = sql_fetchall_cmd(get_playlist_sql)
     total_song_count_playlist = sql_fetchone_cmd(get_song_count)
 
     print(user_playlist)
     print(total_song_count_playlist)
-    #the 'user_id' gets passed to the template
-    context = {'user_id': user_id,
-                'result': user_playlist,
-                'song_count': total_song_count_playlist
-               }
-    #-------------------- delete song from playlist  -------------------#
+
+    # -------------------- delete song from playlist  -------------------#
 
     if request.method == 'POST':
         playlist_to_delete = request.POST.get('remove_playlist', None)
         print(playlist_to_delete)
-        playlist_to_delete_sql = "DELETE FROM createplaylist \
-                                WHERE userid = {} \
-        	                    AND playlistname = \'{}\';".format(user_id,playlist_to_delete)
+        playlist_to_delete_sql = "DELETE FROM createplaylist " \
+                                 "WHERE userid = {} " \
+                                 "AND playlistname = \'{}\';".format(user_id,playlist_to_delete)
         sql_delete_cmd(playlist_to_delete_sql)
-        print ("Executed delete command")
-        #redirects back to itself
+        print("Executed delete command")
+        # redirects back to itself
         return redirect('.')
-      #-------------------- delete song from playlist END -------------------#
+        # -------------------- delete song from playlist END -------------------#
+
+    # the 'user_id' gets passed to the template
+    context = {'user_id': user_id,
+               'result': user_playlist,
+               'song_count': total_song_count_playlist,
+               }
     return render(request, 'user_info/playlist.html', context)
 
 
@@ -105,7 +107,6 @@ def update_age(request, user_id):
 
 
 def show_songs(request, user_id):
-    context = {}
     if "select_genre" in request.POST:
         selected_value = request.POST["select_genre"]
 
@@ -168,3 +169,39 @@ def show_all_users(request, user_id):
         selected_value = None
 
     return render(request, 'user_info/all_users.html', {'selected_value': selected_value,'user_id': user_id})
+
+
+def songs_in_all(request, user_id):
+    # -------------------- Show songs that appear in all playlists  -------------------#
+    # DIVISION QUERY:
+    songs_appear_in_all_sql = "SELECT DISTINCT CS.SongName, AID.stagename, A.albumname, CS.tracklength " \
+                              "FROM containsong CS " \
+                              "JOIN playlistincludessongs PIS ON PIS.songname = CS.songname " \
+                              "AND PIS.albumid = CS.albumid " \
+                              "JOIN Album A ON A.albumid = CS.albumid " \
+                              "JOIN createalbum CA ON CA.albumid = A.albumid " \
+                              "JOIN ArtistUserId AID ON AID.userid = CA.userid " \
+                              "WHERE " \
+                              "NOT EXISTS (" \
+                              "(SELECT CP.UserID, CP.playlistname " \
+                              "FROM CreatePlaylist CP " \
+                              "WHERE CP.playlistname IN ( " \
+                              "SELECT playlistname " \
+                              "FROM createplaylist " \
+                              "WHERE userid = {}) " \
+                              ") " \
+                              "EXCEPT " \
+                              "(SELECT PIS.userid, PIS.playlistname " \
+                              "FROM playlistincludessongs PIS, createplaylist CP " \
+                              "WHERE PIS.SongName = CS.SongName AND " \
+                              "PIS.playlistname = CP.playlistname AND " \
+                              "PIS.userid = CP.userid) " \
+                              ");".format(user_id)
+
+    songs_appear_in_all = sql_fetchall_cmd(songs_appear_in_all_sql)
+    print(songs_appear_in_all)
+    context = {'user_id': user_id,
+               'songs_appear_in_all': songs_appear_in_all
+               }
+
+    return render(request, 'user_info/songs_in_all.html', context)
