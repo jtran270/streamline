@@ -15,48 +15,49 @@ def user_info(request, user_id):
 
 
 def display_playlist(request, user_id):
-    #3. JOIN QUERY:Output playlist name, and all song-related info for user logged in
-    #result returns:playlistname, songname, stagename, albumname, tracklength
-    get_playlist_sql = "SELECT PIS.playlistname, PIS.songname, AID.stagename, A.albumname, CS.tracklength \
-                    FROM playlistincludessongs PIS \
-                    JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname \
-                    JOIN Album A ON A.albumid = CS.albumid \
-                    JOIN createalbum CA ON CA.albumid = A.albumid\
-                    JOIN ArtistUserId AID ON AID.userid = CA.userid\
-                    WHERE PIS.userid = {};".format(user_id)
+    # 3. JOIN QUERY:Output playlist name, and all song-related info for user logged in
+    # result returns:playlistname, songname, stagename, albumname, tracklength
+    get_playlist_sql = "SELECT PIS.playlistname, PIS.songname, AID.stagename, A.albumname, CS.tracklength " \
+                       "FROM playlistincludessongs PIS " \
+                       "JOIN containsong CS ON CS.albumid = PIS.albumid AND CS.songname = PIS.songname " \
+                       "JOIN Album A ON A.albumid = CS.albumid " \
+                       "JOIN createalbum CA ON CA.albumid = A.albumid " \
+                       "JOIN ArtistUserId AID ON AID.userid = CA.userid " \
+                       "WHERE PIS.userid = {};".format(user_id)
 
-    #Find total number of songs in the user playlist
-    get_song_count = "SELECT COUNT(*) \
-                        FROM playlistincludessongs PIS \
-                        JOIN CreatePlaylist CP ON \
-    	                PIS.UserID = CP.UserID AND \
-    	                PIS.PlaylistName = CP.PlaylistName \
-                        JOIN ListenerUserID LID ON CP.UserID = LID.UserID \
-                        WHERE PIS.UserID = {}".format(user_id)
+    # Find total number of songs in the user playlist
+    get_song_count = "SELECT COUNT(*) " \
+                     "FROM playlistincludessongs PIS " \
+                     "JOIN CreatePlaylist CP ON " \
+                     "PIS.UserID = CP.UserID AND " \
+                     "PIS.PlaylistName = CP.PlaylistName " \
+                     "JOIN ListenerUserID LID ON CP.UserID = LID.UserID " \
+                     "WHERE PIS.UserID = {}".format(user_id)
 
     user_playlist = sql_fetchall_cmd(get_playlist_sql)
     total_song_count_playlist = sql_fetchone_cmd(get_song_count)
-
-    print(user_playlist)
-    print(total_song_count_playlist)
-    #the 'user_id' gets passed to the template
+    print(get_playlist_sql)
+    print(get_song_count )
+    # print(user_playlist)
+    # print(total_song_count_playlist)
+    # the 'user_id' gets passed to the template
     context = {'user_id': user_id,
-                'result': user_playlist,
-                'song_count': total_song_count_playlist
+               'result': user_playlist,
+               'song_count': total_song_count_playlist
                }
-    #-------------------- delete song from playlist  -------------------#
+    # -------------------- delete song from playlist  -------------------#
 
     if request.method == 'POST':
         playlist_to_delete = request.POST.get('remove_playlist', None)
         print(playlist_to_delete)
-        playlist_to_delete_sql = "DELETE FROM createplaylist \
-                                WHERE userid = {} \
-        	                    AND playlistname = \'{}\';".format(user_id,playlist_to_delete)
+        playlist_to_delete_sql = "DELETE FROM createplaylist " \
+                                 "WHERE userid = {} " \
+                                 "AND playlistname = \'{}\';".format(user_id,playlist_to_delete)
         sql_delete_cmd(playlist_to_delete_sql)
         print ("Executed delete command")
-        #redirects back to itself
+        # redirects back to itself
         return redirect('.')
-      #-------------------- delete song from playlist END -------------------#
+        # -------------------- delete song from playlist END -------------------#
     return render(request, 'user_info/playlist.html', context)
 
 
@@ -105,7 +106,6 @@ def update_age(request, user_id):
 
 
 def show_songs(request, user_id):
-    context = {}
     if "select_genre" in request.POST:
         selected_value = request.POST["select_genre"]
 
