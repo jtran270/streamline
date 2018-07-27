@@ -1,6 +1,6 @@
-------------------------------------------------------
+
 # MAC SETUP
-------------------------------------------------------
+
 ###  1. DEPENDENCIES INSTALLATION:
 1. Install Python 3. Make sure you have PIP as well.
 2. Install PostgreSQL 10 : https://postgresapp.com
@@ -54,9 +54,9 @@ http://127.0.0.1:8000/login
 ```
 Welcome to Streamline!
 
-------------------------------------------------------
-WINDOWS SETUP
-------------------------------------------------------
+
+# WINDOWS SETUP
+
 ### 1.DEPENDENCIES INSTALLATION:
 
 Install Python (3.5) and PyCharm
