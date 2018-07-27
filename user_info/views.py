@@ -47,12 +47,12 @@ def display_playlist(request, user_id):
     #-------------------- delete song from playlist  -------------------#
 
     if request.method == 'POST':
-        song_to_delete = request.POST.get('remove_from_playlist', None)
-        print(song_to_delete)
-        song_to_delete_sql = "DELETE FROM playlistincludessongs \
-                            WHERE UserID = {} \
-                            AND SongName = \'{}\' ;".format(user_id,song_to_delete)
-        sql_delete_cmd(song_to_delete_sql)
+        playlist_to_delete = request.POST.get('remove_playlist', None)
+        print(playlist_to_delete)
+        playlist_to_delete_sql = "DELETE FROM createplaylist \
+                                WHERE userid = {} \
+        	                    AND playlistname = \'{}\';".format(user_id,playlist_to_delete)
+        sql_delete_cmd(playlist_to_delete_sql)
         print ("Executed delete command")
         #redirects back to itself
         return redirect('.')
