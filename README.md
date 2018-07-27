@@ -1,6 +1,7 @@
-MAC SETUP
-
-####  DEPENDENCIES INSTALLATION:
+------------------------------------------------------
+# MAC SETUP
+------------------------------------------------------
+###  1. DEPENDENCIES INSTALLATION:
 1. Install Python 3. Make sure you have PIP as well.
 2. Install PostgreSQL 10 : https://postgresapp.com
 3. Install Django 2. In terminal:
@@ -11,7 +12,7 @@ pip3 install django
 ```
 pip3 install psycopg2
 ```
-####  SET UP STREAMLINE DATABASE
+###  2. SET UP STREAMLINE DATABASE
 
 1. In Terminal: type 'psql'
 2. In PostgreSQL terminal session. Run prepare_script.sql. This will create a new user sl_admin and the database. 
@@ -35,7 +36,7 @@ streamline_db=> \i /path/to/file/streamline/create_database_script.sql
 streamline_db=> \i /path/to/file/streamline/insert_all_data.sql
 ```
 
-####  RUN WEBSITE
+###  3. RUN WEBSITE
 
 1. cd to streamline directory
 2. Run migration to create Django-specific tables in your database
@@ -43,21 +44,20 @@ streamline_db=> \i /path/to/file/streamline/insert_all_data.sql
 ```
 python3 manage.py migrate
 ```
-
 3. Run server
 ```
 python3 manage.py runserver
 ```
-4. In a web browser, navigate to login page:
+4.  In a web browser, navigate to login page:
 ```
 http://127.0.0.1:8000/login
 ```
 Welcome to Streamline!
 
-
+------------------------------------------------------
 WINDOWS SETUP
-
-#### DEPENDENCIES INSTALLATION:
+------------------------------------------------------
+### 1.DEPENDENCIES INSTALLATION:
 
 Install Python (3.5) and PyCharm
 ```
@@ -75,7 +75,7 @@ NOTE: You may require Visual Studio 10 and/or .NET Framework 4.
 
 
 
-####  RUNNING THE DATABASE:
+### 2.RUNNING THE DATABASE:
 
 In PowerShell/cmd, browse to the PostgreSQL installation directory. 
 Windows 10 default is C:\Program Files\PostgreSQL
@@ -111,7 +111,7 @@ The following commands setup the database in order as described:
 ```
 
 
-####  ACCESSING WEBSITE:
+### 3. ACCESSING WEBSITE:
 
 In PyCharm, go to the terminal view cd to the project file directory, then run migration to create Django-specific tables in your database:
 ```
@@ -126,7 +126,7 @@ http://127.0.0.1:8000/login
 
 
 
-####  RUNNING SQL QUERIES:
+### 4. RUNNING SQL QUERIES:
 
 
 OPTION 1: USING POSTGRESQL GUI
@@ -160,7 +160,7 @@ If you want to run a .sql file with multiple queries in them:
 
 
 
-####  RESETTING
+###  5. RESETTING
 
 If you ever need to reset the entire program and the database, follow these steps:
 
