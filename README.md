@@ -1,13 +1,20 @@
-# LOGIN CREDENTIALS
+Streamline
+==========
+Your favorite music streaming website. 
+Implemented with Python Django and PostgreSQL.
 
-### UserID:Password
+
+Login Credentials
+-----------------
+**UserID:Password**
 ~~~
 dog@dog.com:12345
 cat@cat.com:12345
 ~~~
 
 
-# MAC SETUP
+MAC SETUP
+-----------
 
 ###  1. DEPENDENCIES INSTALLATION:
 1. Install Python 3. Make sure you have PIP as well.
@@ -63,7 +70,8 @@ http://127.0.0.1:8000/login
 Welcome to Streamline!
 
 
-# WINDOWS SETUP
+WINDOWS SETUP
+---------------
 
 ### 1.DEPENDENCIES INSTALLATION:
 
